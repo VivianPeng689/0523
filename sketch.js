@@ -1,5 +1,4 @@
 let facemesh;
-let predictions = [];
 let video;
 const indices = [409,270,269,267,0,37,39,40,185,61,146,91,181,84,17,314,405,321,375,291];
 
@@ -15,11 +14,7 @@ function setup() {
 
 function modelReady() {
   console.log('Facemesh model loaded!');
-  facemesh.on('predict', gotResults); // 監聽預測事件
-}
-
-function gotResults(results) {
-  predictions = results;
+  // 不需再註冊 on/predict
 }
 
 function draw() {
@@ -29,8 +24,9 @@ function draw() {
 }
 
 function drawFaceMeshLines() {
-  if (predictions.length > 0) {
-    let keypoints = predictions[0].scaledMesh;
+  // 直接從 facemesh.predictions 取得結果
+  if (facemesh && facemesh.predictions && facemesh.predictions.length > 0) {
+    let keypoints = facemesh.predictions[0].scaledMesh;
     stroke(255, 0, 0);
     strokeWeight(15);
     noFill();
